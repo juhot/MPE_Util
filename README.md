@@ -11,7 +11,7 @@ the MPE sub tracks. It updates the MPE sub tracks properties when the MPE Master
 arm, instrument, name, color and clip firing changes are handled. Unfortunately the updates get applied with a tinyish
 (usually less than 100ms), varying delay.
 
-Use the script at your own risk, it may brake your Live set or even installation! Try it first on a new set, and backup
+__Use the script at your own risk__, it may brake your Live set or even installation! Try it first on a new set, and backup
 your project when loading it while the script is active (selected as a Control Surface)!
 
 The script should work on Live 10 (tested with beta) and Live 9 (from 9.7, could work on older versions as well, but it
@@ -24,7 +24,7 @@ Windows: Live Install Dir\Resources\MIDI Remote Scripts\
 OSX: /Applications/Ableton Live *.app/Contents/App-Resources/MIDI Remote Scripts/
 
 So that you'll find folder MPE_Util from the aforementioned MIDI Remote Scripts directory. MPE_Util should contain two
-folders and some files, e.g. __init__.py and MPE_Util.py.
+folders and some files, e.g. conf.txt and MPE_Util.py.
 
 Start Live, go to settings, and on Link MIDI tab select MPE_Util as a Control Surface on a free slot. You should see a
 message at the bottom of the screen saying "MPE Util loaded!".
