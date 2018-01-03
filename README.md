@@ -1,5 +1,5 @@
 # MPE_Util
-MIDI Remote Script for Ableton's Live 9/10, adding MPE-utilities
+MIDI Remote Script for Ableton Live 9/10, adding MPE-utilities
 
 MPE stands for MIDI Polyphonic Expression, https://www.midi.org/articles/midi-polyphonic-expression-mpe
 
@@ -13,6 +13,9 @@ arm, instrument, name, color and clip firing changes are handled. Unfortunately 
 
 Use the script at your own risk, it may brake your Live set or even installation! Try it first on a new set, and backup
 your project when loading it while the script is active (selected as a Control Surface)!
+
+The script should work on Live 10 (tested with beta) and Live 9 (from 9.7, could work on older versions as well, but it
+would require some work. I won't try unless at least some people are interested).
 
 ## Installation:
 While Live is not running, clone or download and extract zip from github: https://github.com/juhot/MPE_Util to Live's
