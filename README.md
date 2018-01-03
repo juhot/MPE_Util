@@ -11,6 +11,10 @@ the MPE sub tracks. It updates the MPE sub tracks properties when the MPE Master
 arm, instrument, name, color and clip firing changes are handled. Unfortunately the updates get applied with a tinyish
 (usually less than 100ms), varying delay.
 
+By default, all MPE Master tracks utilize a GhostMidiInputTrack as MIDI Input. The GhostMidiInputTrack is a gray
+MIDI track with no input and no output. It enables Arm button and 'ghost' clips on MPE Master track, while not
+interfering the MPE input.
+
 __Use the script at your own risk__, it may brake your Live set or even installation! Try it first on a new set, and backup
 your project when loading it while the script is active (selected as a Control Surface)!
 
