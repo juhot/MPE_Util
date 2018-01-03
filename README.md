@@ -20,7 +20,7 @@ would require some work. I won't try unless at least some people are interested)
 ## Installation:
 While Live is not running, clone or download and extract zip from github: https://github.com/juhot/MPE_Util to Live's
 MIDI Remote Scripts folder:
-Win: Live Install Dir\Resources\MIDI Remote Scripts\
+Windows: Live Install Dir\Resources\MIDI Remote Scripts\
 OSX: /Applications/Ableton Live *.app/Contents/App-Resources/MIDI Remote Scripts/
 
 So that you'll find folder MPE_Util from the aforementioned MIDI Remote Scripts directory. MPE_Util should contain two
