@@ -1,0 +1,17 @@
+# utilizeGhostInputTrack: if false, MPE Master tracks will by default have No Input. if true, any MPE Master tracks
+# will get set to receive MIDI from GhostInputTrack. This way the MPE Master track will have an Arm -button and it will
+# record clips in sync with its MPE sub tracks. If the set doesn't already have GhostInputTrack, it will be created.
+# The GhostInputTrack is a MIDI track with no input and no output, colored gray.
+utilizeGhostInputTrack: true
+
+# defaultMPEControllerNamePrefix: When creating a MPE Master track, its subtracks will receive their MIDI Input from MIDI
+# port which has a name which starts with this value. You may try e.g. "Seaboard" or "Linnstrument".
+defaultMPEControllerNamePrefix: "Seaboard"
+
+# defaultMpeChannelCount: defines how many MPE sub tracks will be created = how many channels are listened to.
+defaultMpeChannelCount: 16
+
+# createMPEPostfixes: a list of phrases which, when added to the end of track's name, activate the creation of MPE sub
+# tracks on the renamed track. Found postfix will be automatically removed. If loading a set with a track with its name
+# ending with a listed postfix, unexpected things may happen, so do not use phrases you normally use in track names!
+createMPEPostfixes: "-createMPE", "-creatempe"
