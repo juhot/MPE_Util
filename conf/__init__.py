@@ -7,7 +7,7 @@
 import os
 
 import ItemTypeNamingInfos
-from ..UtilContainer import log_message
+# from ..UtilContainer import log_message
 itemTypeNamingInfos = ItemTypeNamingInfos._itemTypeNamingInfos
 utilizeGhostInputTrack = True
 defaultMPEControllerNamePrefix = "Seaboard"
@@ -41,13 +41,11 @@ def _parseStrList(strValue):
     theValue = []
     for tempPart in strValue.split(","):
         theValue.append(_parseStr(tempPart.strip()))
-        log_message("Checked:",tempPart,"added:",theValue[-1])
         if theValue[-1] is None:
             return None
     return theValue
 
 confPath = os.path.dirname(os.path.abspath(__file__))+"/../conf.txt"
-log_message("Trying to read conf.txt, path:",confPath)
 try:
     with open(confPath) as confTxtFile:
         confLines = confTxtFile.readlines()
@@ -73,12 +71,11 @@ try:
                     tempArgValue = _parseInt(tempArgValue, min=1, max=16)
                     if tempArgValue is not None:
                         defaultMpeChannelCount = tempArgValue
-                        log_message("Found defaultMpeChannelCount from conf.txt, setting:", defaultMpeChannelCount)
+                        # log_message("Found defaultMpeChannelCount from conf.txt, setting:", defaultMpeChannelCount)
                 elif tempArgName == "createMPEPostfixes":
                     tempPostfixList = _parseStrList(tempArgValue)
-                    log_message("Parsed stringlist:",tempPostfixList)
                     if tempPostfixList is not None:
-                        log_message("Found createMPEPostfixes from conf.txt, setting:", utilizeGhostInputTrack)
+                        # log_message("Found createMPEPostfixes from conf.txt, setting:", utilizeGhostInputTrack)
                         itemTypeNamingInfos['Track.MidiTrack']['postfixesForFunctions']['create_mpe_input_tracks']\
                             = tempPostfixList
 
