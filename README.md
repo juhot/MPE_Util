@@ -28,8 +28,9 @@ MIDI Remote Scripts folder:
 Windows: Live Install Dir\Resources\MIDI Remote Scripts\
 OSX: /Applications/Ableton Live *.app/Contents/App-Resources/MIDI Remote Scripts/
 
-So that you'll find folder MPE_Util from the aforementioned MIDI Remote Scripts directory. MPE_Util should contain two
-folders and some files, e.g. conf.txt and MPE_Util.py.
+So that you'll find folder MPE_Util from the aforementioned MIDI Remote Scripts directory. If the folder name is
+"MPE_Util-master", rename it to "MPE_Util". The "MPE_Util" folder should contain two folders and some files, e.g. conf.txt
+and MPE_Util.py.
 
 Start Live, go to settings, and on Link MIDI tab select MPE_Util as a Control Surface on a free slot. You should see a
 message at the bottom of the screen saying "MPE Util loaded!".
