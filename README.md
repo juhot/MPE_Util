@@ -15,7 +15,7 @@ By default, all MPE Master tracks utilize a GhostMidiInputTrack as MIDI Input. T
 MIDI track with no input and no output. It enables Arm button and 'ghost' clips on MPE Master track, while not
 interfering the MPE input.
 
-__Use the script at your own risk__, it may brake your Live set or even installation! Try it first on a new set, and backup
+__Use the script at your own risk__, it may break your Live set or even installation! Try it first on a new set, and backup
 your project when loading it while the script is active (selected as a Control Surface)!
 
 The script should work on Live 10 (tested with beta) and Live 9 (from 9.7, could work on older versions as well, but it
@@ -60,6 +60,6 @@ If you would like to change the "MIDI From" on the subtracks, select the new inp
 track, the rest will follow.
 
 
-## Developement:
+## Development:
 I have a lot of stuff on my TODO list at the moment, but found bugs may be fixed more or less quickly. I'm planning to
 include new features as well, but probably after the release of Live 10.
