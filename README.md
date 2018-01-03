@@ -14,7 +14,7 @@ arm, instrument, name, color and clip firing changes are handled. Unfortunately 
 Use the script at your own risk, it may brake your Live set or even installation! Try it first on a new set, and backup
 your project when loading it while the script is active (selected as a Control Surface)!
 
-#Installation:
+##Installation:
 While Live is not running, clone or download and extract zip from github: https://github.com/juhot/MPE_Util to Live's
 MIDI Remote Scripts folder:
 Win: Live Install Dir\Resources\MIDI Remote Scripts\
@@ -26,7 +26,7 @@ folders and some files, e.g. __init__.py and MPE_Util.py.
 Start Live, go to settings, and on Link MIDI tab select MPE_Util as a Control Surface on a free slot. You should see a
 message at the bottom of the screen saying "MPE Util loaded!".
 
-#Configuration:
+##Configuration:
 You may configure default values for your MPE-Controllers MIDI port's name, the number of MIDI channels to use, and
 whether a GhostInputTrack will be created. The default settings may be changed by modifying file (instructions are in
 file):
@@ -37,7 +37,7 @@ You may alter the list of keyphrases which activate the creation of the MPE-midi
 Note: you will have to create a new or load an existing Live set for the changes to take effect!
 
 
-#Using:
+##Using:
 When you want to create input tracks for individual MIDI channels, rename a track with an instrument by adding
 "-createMPE" to the end of the track's name. MPE sub tracks should appear after a moment, and immeadately switch their
 names, colors and arm-states to match the instrument track.
@@ -51,6 +51,6 @@ If you would like to change the "MIDI From" on the subtracks, select the new inp
 track, the rest will follow.
 
 
-#Developement:
+##Developement:
 I have a lot of stuff on my TODO list at the moment, but found bugs may be fixed more or less quickly. I'm planning to
 include new features as well, but probably after the release of Live 10.
