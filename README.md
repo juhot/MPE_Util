@@ -1,15 +1,17 @@
 # MPE_Util
-MIDI Remote Script for Ableton Live 9/10, adding MPE-utilities
+MIDI Remote Script ("Control Surface") for Ableton Live 9/10, adding MPE-utilities.
+
+Quick demonstration on youtube:
+coming..
 
 MPE stands for MIDI Polyphonic Expression, https://www.midi.org/articles/midi-polyphonic-expression-mpe
 
-Ableton Live doesn't support MPE, as all the incoming MIDI on a MIDI track goes to channel 1. However, one can create
+Ableton Live doesn't support MPE well, as all the incoming MIDI on a MIDI track goes to channel 1. However, one can create
 "MPE sub tracks", individual MIDI tracks for receiving each of the MIDI channels from a MPE-source, and route their
 output to an instrument on another MIDI track, the "MPE Master track". This requires a lot of manual operations, such as
 setting of MIDI From and MIDI To parameters.. The MPE_Util MIDI Remote Script automates the creation and configuring of
 the MPE sub tracks. It updates the MPE sub tracks properties when the MPE Master track is modified as well. Currently
-arm, instrument, name, color and clip firing changes are handled. Unfortunately the updates get applied with a tinyish
-(usually less than 100ms), varying delay.
+changes in MPE Master tracks arm, instrument, name, color and clip firing are handled. Unfortunately the updates get applied with a tinyish (usually less than 100ms), varying delay (launch quantization recommended).
 
 By default, all MPE Master tracks utilize a GhostMidiInputTrack as MIDI Input. The GhostMidiInputTrack is a gray
 MIDI track with no input and no output. It enables Arm button and 'ghost' clips on MPE Master track, while not
@@ -21,16 +23,25 @@ your project when loading it while the script is active (selected as a Control S
 The script should work on Live 10 (tested with beta) and Live 9 (from 9.7, could work on older versions as well, but it
 would require some work. I won't try unless at least some people are interested).
 
+###### Supported Live versions:
+* Live 9 (9.7->)
+* Live 10 (beta)
+
+###### Supported MPE controllers:
+All the MPE controllers should be supported, but here's a list of devices which have been tested:
+* Roli Seaboard RISE
+
+
 ## Installation:
-While Live is not running, clone or download and extract zip from github: https://github.com/juhot/MPE_Util to Live's
-MIDI Remote Scripts folder:
+Ableton's instructions for using and installing 3rd party Control Surfaces:
+https://help.ableton.com/hc/en-us/articles/209072009-How-to-install-a-third-party-Remote-Script
 
-Windows: Live Install Dir\Resources\MIDI Remote Scripts\
-OSX: /Applications/Ableton Live *.app/Contents/App-Resources/MIDI Remote Scripts/
+Clone git or download zip from github: https://github.com/juhot/MPE_Util and get the MPE_Util -dir to Live's MIDI
+Remote Scripts dir (if your folder is named "MPE_Util-master", rename it to "MPE_Util"). Afterwards, script's dir should
+look like as in the linked picture:
+* [Win: [Live Install Dir]\Resources\MIDI Remote Scripts\MPE_Util](/img/win_dir.png)  
+* OSX: /Applications/Ableton Live *.app/Contents/App-Resources/MIDI Remote Scripts/MPE_Util
 
-So that you'll find folder MPE_Util from the aforementioned MIDI Remote Scripts directory. If the folder name is
-"MPE_Util-master", rename it to "MPE_Util". The "MPE_Util" folder should contain two folders and some files, e.g. conf.txt
-and MPE_Util.py.
 
 Start Live, go to settings, and on Link MIDI tab select MPE_Util as a Control Surface on a free slot. You should see a
 message at the bottom of the screen saying "MPE Util loaded!".
@@ -42,11 +53,12 @@ file):
 MPE_Util/conf/config.txt
 
 You may alter the list of keyphrases which activate the creation of the MPE-midi tracks from the conf as well.
-
 Note: you will have to create a new or load an existing Live set for the changes to take effect!
 
 
-## Using:
+## Usage:
+As the automatic firing of clips on subtracks isn't perfectly synced, global launch quantization value other than None is recommended.
+
 When you want to create input tracks for individual MIDI channels, rename a track with an instrument by adding
 "-createMPE" to the end of the track's name. MPE sub tracks should appear after a moment, and immeadately switch their
 names, colors and arm-states to match the instrument track.
@@ -59,7 +71,24 @@ Input tracks will automatically update their "MIDI To" target whenever the instr
 If you would like to change the "MIDI From" on the subtracks, select the new input source on the first input chanells
 track, the rest will follow.
 
+## How it works:
+MPE Util works as a Control Surface in Live. It is a python script which listens for changes, and extends functionality 
+in some objects in Live set. e.g. if track's name changes to end with a certain phrase, a method extending the track's
+model is called, or if a track extended to be a MPE Master track is armed, a method arming its MPE sub tracks is called.
+MPE Util saves some parameters of the extended items as a part of the set, and loads the information when the set is loaded.
+
 
 ## Development:
 I have a lot of stuff on my TODO list at the moment, but found bugs may be fixed more or less quickly. I'm planning to
 include new features as well, but probably after the release of Live 10.
+
+
+##### TODO (things to implement, sooner or later):
+* verifying the support of other than listed MPE coontrollers
+* find out if a MIDI effect plugin could act as the midi receiver on a MPE Master track, instead of the instrument
+
+##### Unable to implement (lacking API functions or skill):
+* controlling of clips in Arranger
+* perfectly synced operation
+* automatic grouping of tracks
+* adding controls (e.g. buttons and context menu items) to Live's GUI
