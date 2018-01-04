@@ -98,10 +98,10 @@ include new features as well, but probably after the release of Live 10.
 * automatic grouping of tracks
 * adding controls (e.g. buttons and context menu items) to Live's GUI
 
-##### Contact:
+## Contact:
 If you encounter bugs, or would like to throw suggestions about new functionality, or altering the current, you can send me a mail at juhodev att gmail.com.
 
-##### Acknowledgments:
+## Acknowledgments:
 * Ableton for providing the python API (and Live:)
 * Julien Bayle for his [Live API -documentation](https://julienbayle.studio/PythonLiveAPI_documentation/Live9.6.xml)
 * stufisher at github for [LiveOSC2](https://github.com/stufisher/LiveOSC2), which I found a great example.
