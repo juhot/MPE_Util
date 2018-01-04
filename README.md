@@ -2,7 +2,8 @@
 MIDI Remote Script ("Control Surface") for Ableton Live 9/10, adding MPE-utilities.
 
 Quick demonstration on youtube:
-coming..
+https://youtu.be/Hg0kUVCfxo0
+
 
 MPE stands for MIDI Polyphonic Expression, https://www.midi.org/articles/midi-polyphonic-expression-mpe
 
@@ -40,7 +41,7 @@ Clone git or download zip from github: https://github.com/juhot/MPE_Util and get
 Remote Scripts dir (if your folder is named "MPE_Util-master", rename it to "MPE_Util"). Afterwards, script's dir should
 look like as in the linked picture:
 * [Win: [Live Install Dir]\Resources\MIDI Remote Scripts\MPE_Util](/img/win_dir.png)  
-* OSX: /Applications/Ableton Live *.app/Contents/App-Resources/MIDI Remote Scripts/MPE_Util
+* [OSX: /Applications/Ableton Live *.app/Contents/App-Resources/MIDI Remote Scripts/MPE_Util](/img/osx_dir.png)
 
 
 Start Live, go to settings, and on Link MIDI tab select MPE_Util as a Control Surface on a free slot. You should see a
@@ -69,7 +70,9 @@ will follow the instrument track as well.
 Input tracks will automatically update their "MIDI To" target whenever the instrument on the instrument track is changed.
 
 If you would like to change the "MIDI From" on the subtracks, select the new input source on the first input chanells
-track, the rest will follow.
+track, the rest will follow. If the "MIDI To" on the subtracks is pointing in wrong destination, e.g. MPE Master tracks
+"Track In", change the "MIDI To" on the first MPE sub track to any other value. MPE Util will then try to fix the routing
+on all MPE sub tracks.
 
 ## How it works:
 MPE Util works as a Control Surface in Live. It is a python script which listens for changes, and extends functionality 
@@ -85,6 +88,8 @@ include new features as well, but probably after the release of Live 10.
 
 ##### TODO (things to implement, sooner or later):
 * verifying the support of other than listed MPE coontrollers
+* add parameters (such as follow track colors) to conf.txt
+* add support for parameters in rename->method calls, such as "-creatempe11" to create 11 MPE sub tracks
 * find out if a MIDI effect plugin could act as the midi receiver on a MPE Master track, instead of the instrument
 
 ##### Unable to implement (lacking API functions or skill):
@@ -92,3 +97,11 @@ include new features as well, but probably after the release of Live 10.
 * perfectly synced operation
 * automatic grouping of tracks
 * adding controls (e.g. buttons and context menu items) to Live's GUI
+
+##### Contact:
+If you encounter bugs, or would like to throw suggestions about new functionality, or altering the current, you can send me a mail at juhodev att gmail.com.
+
+##### Acknowledgments:
+* Ableton for providing the python API (and Live:)
+* Julien Bayle for his [Live API -documentation](https://julienbayle.studio/PythonLiveAPI_documentation/Live9.6.xml)
+* stufisher at github for [LiveOSC2](https://github.com/stufisher/LiveOSC2), which I found a great example.
