@@ -7,16 +7,37 @@
 import os
 
 import ItemTypeNamingInfos
-# from ..UtilContainer import log_message
+from ..UtilContainer import log_error
+
+
 itemTypeNamingInfos = ItemTypeNamingInfos._itemTypeNamingInfos
 utilizeGhostInputTrack = True
 defaultMPEControllerNamePrefix = "Seaboard"
 defaultMpeChannelCount = 11
 
+_strToBoolDict = {
+    "1": True,
+    "True": True,
+    "true": True,
+    "TRUE": True,
+    "Yes": True,
+    "YES": True,
+    "yes": True,
+    
+    "0": False,
+    "False": False,
+    "false": False,
+    "FALSE": False,
+    "No": False,
+    "NO": False,
+    "no": False
+}
+
 def _parseBool(strValue):
-    if strValue in ["1", "True", "true", "TRUE", "Yes", "YES", "yes"]:
-        return True
-    else:
+    try:
+        return _strToBoolDict[strValue]
+    except KeyError:
+        log_error("ERROR While reading config, unable to parse bool from str: '"+strValue+"', returning False")
         return False
 
 def _parseInt(strValue, min=1, max=16):
