@@ -7,12 +7,14 @@ https://youtu.be/Hg0kUVCfxo0
 
 MPE stands for MIDI Polyphonic Expression, https://www.midi.org/articles/midi-polyphonic-expression-mpe
 
-Ableton Live doesn't support MPE well, as all the incoming MIDI on a MIDI track goes to channel 1. However, one can create
-"MPE sub tracks", individual MIDI tracks for receiving each of the MIDI channels from a MPE-source, and route their
-output to an instrument on another MIDI track, the "MPE Master track". This requires a lot of manual operations, such as
-setting of MIDI From and MIDI To parameters.. The MPE_Util MIDI Remote Script automates the creation and configuring of
-the MPE sub tracks. It updates the MPE sub tracks properties when the MPE Master track is modified as well. Currently
-changes in MPE Master tracks arm, instrument, name, color and clip firing are handled. Unfortunately the updates get applied with a tinyish (usually less than 100ms), varying delay (launch quantization recommended).
+Ableton Live doesn't support MPE well, as all the incoming MIDI on a MIDI track goes to channel 1. However, one can
+create "MPE sub tracks", individual MIDI tracks for receiving each of the MIDI channels from a MPE-source, and route
+their output to an instrument on another MIDI track, the "MPE Master track". This requires a lot of manual
+operations, such as setting of MIDI From and MIDI To parameters.. The MPE_Util MIDI Remote Script automates the
+creation and configuring of the MPE sub tracks. It updates the MPE sub tracks properties when the MPE Master track is
+modified as well. Currently changes in MPE Master tracks arm, instrument, name, color and clip firing are handled.
+Unfortunately the updates get applied with a tinyish (usually less than 100ms), varying delay (launch quantization
+recommended).
 
 By default, all MPE Master tracks utilize a GhostMidiInputTrack as MIDI Input. The GhostMidiInputTrack is a gray
 MIDI track with no input and no output. It enables Arm button and 'ghost' clips on MPE Master track, while not
@@ -91,6 +93,7 @@ include new features as well, but probably after the release of Live 10.
 * add parameters (such as follow track colors) to conf.txt
 * add support for parameters in rename->method calls, such as "-creatempe11" to create 11 MPE sub tracks
 * find out if a MIDI effect plugin could act as the midi receiver on a MPE Master track, instead of the instrument
+* add support for manually adding and removing MPE Sub tracks
 
 ##### Unable to implement (lacking API functions or skill):
 * controlling of clips in Arranger

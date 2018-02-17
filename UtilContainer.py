@@ -45,27 +45,27 @@ def format_to_str(*a, **kwargs):
     return result
 
 
-def getDictString(dictToPrint, lineToPrint="", currentIntendation=0):
+def getDictString(dictToPrint, lineToPrint="", currentIndentation=0):
     """ Creates a readable str from dict. """
     if type(dictToPrint) is dict:
         for tempKey in sorted(dictToPrint.keys()):
             tempObj = dictToPrint[tempKey]
             # lineToPrint = ""
             indentationStr= ""
-            for x in range(0, currentIntendation):
+            for x in range(0, currentIndentation):
                 indentationStr+= " "
 
-            lineToPrint += intendationStr
+            lineToPrint += indentationStr
             if type(tempObj) == dict:
                 lineToPrint += str(tempKey) + ":"
                 if len(tempObj.keys()) == 1 and type(tempObj[tempObj.keys()[0]]) is str:
-                    lineToPrint += getDictString(tempObj, currentIntendation=currentIntendation + 2)
+                    lineToPrint += getDictString(tempObj, currentIndentation=currentIndentation + 2)
                 else:
                     # if tempObj == {}:
                     #    lineToPrint += "{}"
                     lineToPrint += "{\n"
                     lineToPrint += getDictString(tempObj,
-                                                 currentIntendation=currentIntendation + 2) + indentationStr+ "}\n"
+                                                 currentIndentation=currentIndentation + 2) + indentationStr+ "}\n"
             else:
                 objStr = str(tempObj).lstrip()
                 objStr = objStr.replace('\n', ' ').replace('\r', ' ')
@@ -77,19 +77,19 @@ def getDictString(dictToPrint, lineToPrint="", currentIntendation=0):
             tempObj = listToPrint[x]
             # lineToPrint = ""
             indentationStr= ""
-            for x in range(0, currentIntendation):
+            for x in range(0, currentIndentation):
                 indentationStr+= " "
 
-            lineToPrint += indentationStr+ str(x) + ": [" + intendationStr
+            lineToPrint += indentationStr+ str(x) + ": [" + indentationStr
             if type(tempObj) == dict:
                 if len(tempObj.keys()) == 1 and type(tempObj[tempObj.keys()[0]]) is str:
-                    lineToPrint += getDictString(tempObj, currentIntendation=currentIntendation + 2)
+                    lineToPrint += getDictString(tempObj, currentIndentation=currentIndentation + 2)
                 else:
                     # if tempObj == {}:
                     #    lineToPrint += "{}"
                     lineToPrint += "{\n"
                     lineToPrint += getDictString(tempObj,
-                                                 currentIntendation=currentIntendation + 2) + indentationStr+ "}]\n"
+                                                 currentIndentation=currentIndentation + 2) + indentationStr+ "}]\n"
             else:
                 objStr = str(tempObj).lstrip()
                 objStr = objStr.replace('\n', ' ').replace('\r', ' ')

@@ -33,7 +33,6 @@ MidiTrackModels when utilized.
 
 """
 
-# TODO:
 
 from __future__ import with_statement
 
@@ -96,7 +95,8 @@ class SongModel(object):
     def _ghostMidiInputTrack(self, value):
         if value != self.__ghostMidiInputTrack:
             self.__ghostMidiInputTrack = value
-            self._call_ghostMidiInputTrack_listeners()
+            if type(value) is not str:
+                self._call_ghostMidiInputTrack_listeners()
 
     def _call_ghostMidiInputTrack_listeners(self):
         for tempCallback in self._ghostMidiInputTrackListeners:
@@ -124,7 +124,7 @@ class SongModel(object):
 
     def _create_ghostMidiInputTrack(self):
         # Create a ghostMidiInputTrack..
-        tempChannelId = len(self.item.tracks) - 1
+        tempChannelId = len(self.item.tracks)
 
         self.item.create_midi_track(tempChannelId)
 
@@ -146,6 +146,7 @@ class SongModel(object):
         keyForSetGhostMidiInputTrackPhase1 = "set-GhostMidiInputTrack-Phase1"
         InstanceContainer.add_delayed_callback(keyForSetGhostMidiInputTrackPhase1, set_ghostMidiInputTrackPhase1, (tempChannelId,), {})
         self._ghostMidiInputTrack = "GhostMidiInput"
+        return True
 
 class TrackListModel(object):
     """ TrackListModel extends the song instance's 'tracks' Base.ItemList LOM object.
@@ -572,7 +573,10 @@ class MidiTrackModel(TrackModel):
                         InstanceContainer.songModel._ghostMidiInputTrack.item.name)
 
                 if InstanceContainer.songModel._ghostMidiInputTrack is None:
-                    InstanceContainer.songModel._create_ghostMidiInputTrack()
+
+                    InstanceContainer.add_delayed_callback("create_GhostMidiInputTrack",
+                                       InstanceContainer.songModel._create_ghostMidiInputTrack, [], {}, delayCycles=4)
+
 
                     InstanceContainer.songModel.add_ghostMidiInputTrack_listener(updateInputToGhost)
 
