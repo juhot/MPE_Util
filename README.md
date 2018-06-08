@@ -28,7 +28,7 @@ would require some work. I won't try unless at least some people are interested)
 
 ###### Supported Live versions:
 * Live 9 (9.7->)
-* Live 10 (beta)
+* Live 10
 
 ###### Supported MPE controllers:
 All the MPE controllers should be supported, but here's a list of devices which have been tested:
