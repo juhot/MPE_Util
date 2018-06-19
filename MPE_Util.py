@@ -36,10 +36,12 @@ MidiTrackModels when utilized.
 
 from __future__ import with_statement
 
+
+import re
 import Live
 from ableton.v2.control_surface.control_surface import ControlSurface
 
-from UtilContainer import log_message
+from UtilContainer import log_message, log_error
 from DelayedCallbackHandler import DelayedCallbackHandler
 import conf
 import ItemModelDataHandler
@@ -226,13 +228,18 @@ class TrackModel(object):
         self.itemNamingInfo = None
         self._listenToPostfixes = None
         if self.itemType in conf.itemTypeNamingInfos:
-
             self.itemNamingInfo = conf.itemTypeNamingInfos[self.itemType]
-            if 'postfixesForFunctions' in self.itemNamingInfo:
+            if 'postfixCallableFunctions' in self.itemNamingInfo:
                 self._listenToPostfixes = {}
-                for tempFunctionName, tempPostfixList in self.itemNamingInfo['postfixesForFunctions'].iteritems():
-                    for tempPostfix in tempPostfixList:
-                        self._listenToPostfixes[tempPostfix] = tempFunctionName
+                for tempFunctionName, tempPostfixInfo in self.itemNamingInfo['postfixCallableFunctions'].iteritems():
+                    for tempPostfixStr in tempPostfixInfo['postfixes']:
+                        tempRegexStr = tempPostfixInfo['regexBase'].replace("#POSTFIX#", tempPostfixStr)
+                        try:
+                            self._listenToPostfixes[tempRegexStr] = getattr(self, tempPostfixInfo['callback'])
+                        except AttributeError:
+                            log_error("Object of type:",self.itemType,"doesn't have callback function named:", "'"+tempPostfixInfo['callback']+"'", "cannot create calback to listen for name postfix with regex:","'"+tempRegexStr+"'")
+                            
+
 
         self.foundExternalData = InstanceContainer.itemModelDataHandler.get_itemModels_external_data(self)
 
@@ -292,26 +299,24 @@ class TrackModel(object):
     def _name_changed_callback(self):
         postfixFound = False
         if self._listenToPostfixes != None:
-            for tempPostfix, tempFunctionName in self._listenToPostfixes.iteritems():
-                if self.item.name.endswith(tempPostfix):
-                    def delayedCallbackToFixName(newName):
-                        self.item.name = newName
-                        return True
-
-                    InstanceContainer.add_delayed_callback("CallbackForPostfixNameFix", delayedCallbackToFixName,
-                                                         [self.item.name[:-len(tempPostfix)]], {})
-                    postfixFound = True
-                    if hasattr(self, tempFunctionName):
-                        def callPostfixFunction():
-                            getattr(self, tempFunctionName)()
+            freshName = self.item.name
+            for tempPostfixRegexStr, tempCallbackFn in self._listenToPostfixes.iteritems():
+                #log_message("Checking for fresh name: ",freshName, "with regexstatement: ", tempPostfixRegexStr)
+                if not postfixFound:
+                    match = re.search(tempPostfixRegexStr, freshName, re.IGNORECASE)
+                    if match:
+                        log_message("Found match!! command: ",match.group('command'), "and num_arg:", match.group('num_arg'));
+                        def delayedCallbackToFixName(newName):
+                            self.item.name = newName
                             return True
 
-                        InstanceContainer.add_delayed_callback("CallbackForPostfixMethodCall", callPostfixFunction, [],
-                                                             {}, delayCycles=2)
-                    else:
-                        log_message("[ERROR!], itemModel:", self.itemType + "-" + self.itemModelPointer,
-                                    "has function:", tempFunctionName,
-                                    "in naminginfos 'postfixesForFunctions' but haven't gotten the function!")
+                        InstanceContainer.add_delayed_callback("CallbackForPostfixNameFix", delayedCallbackToFixName,
+                                                               [match.group('item_name')], {})
+                        postfixFound = True
+
+                        InstanceContainer.add_delayed_callback("CallbackForPostfixMethodCall", tempCallbackFn, [match],
+                                                                   {}, delayCycles=2)
+
         if not postfixFound:
             self._update_s_name()
 
@@ -336,7 +341,6 @@ class TrackModel(object):
                 # log_message("Calling tempMixedClassesInitName:",tempMixedClassesInitName)
                 getattr(self, tempMixedClassesInitName)(*args, **kwargs)
             else:
-
                 log_message("[ERROR!] Can't find toMixWithClasses:", toMixWithClassName, "init-method by name:",
                             tempMixedClassesInitName)
 
@@ -504,6 +508,14 @@ class MidiTrackModel(TrackModel):
                 log_message("In externalData for MidiTrackModel:", self.itemModelPointer,
                             "isGhostMidiInputTrack is found True! Mixing..")
                 self._mix_with_class("GhostMidiInputTrackMix")
+
+    def _create_mpe_input_tracks_caller(self, match):
+        if match.group('num_arg') != '' and 1 <= int(match.group('num_arg')) and int(match.group('num_arg')) <= 16:
+            self.create_mpe_input_tracks(inputTrackCount=int(match.group('num_arg')))
+        else:
+            self.create_mpe_input_tracks()
+
+        return True
 
     def create_mpe_input_tracks(self, loadingTracks=False, inputTrackCount=None):
         """ Mixes the MidiTrackModel with MPEMasterTrackMixIn class. loadingTracks is True when a Live set is loaded,

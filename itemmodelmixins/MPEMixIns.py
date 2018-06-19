@@ -10,6 +10,8 @@
 
 import Live
 
+import types
+
 from ..UtilContainer import log_message
 from .. import conf
 from .. import InstanceContainer
@@ -35,7 +37,7 @@ class MPEMasterTrackMix(object):
         self._mpeArmState = self.item.arm
         self._mpeClipSlotToFireIndex = self._get_clip_slot_to_fire_index(self.item)
         self._mpeControllerInputTypeName = self._get_mpe_controller_input_type_name()
-
+        self._subtracks_target_output_routing_channel_name = None
 
         def mpeMaster_playing_slot_index_changed():
             #log_message("mpeMaster_playing_slot_index_changed, now:",self.item.playing_slot_index)
@@ -74,17 +76,24 @@ class MPEMasterTrackMix(object):
         def _update_subtracks_target_output_routing_channel_name():
             foundName = None
             for tempDevice in self.item.devices:
-                #log_message("Checking device of type:", type(tempDevice.type), "-", tempDevice.type)
                 if tempDevice.type == Live.Device.DeviceType.instrument:
                     #log_message("[DEBUG] Found mpe-masters instrument:", tempDevice, "-", tempDevice.class_name, "-",
                     #            tempDevice.name)
 
-                    if tempDevice.name is not None:
-                        log_message("[WTF] found two instruments on track:", self.s_name)
+                    if foundName is not None:
+                        log_message("[WTF] found another instrument on track:", self.s_name,"named:",tempDevice.name)
 
                     foundName = tempDevice.name
+            instrumentAdded = False
+            if self._subtracks_target_output_routing_channel_name is None and foundName is not None:
+                instrumentAdded = True
 
             self._subtracks_target_output_routing_channel_name = foundName
+            if instrumentAdded:
+                for tempMPESubtrackModelIMP, tempMPESubtrackModel in self._mpeSubtracks.iteritems():
+                    if tempMPESubtrackModel._mpeChannelId == 1:
+                        log_message("Setting output routing on ch1 to:",tempMPESubtrackModel.item.output_routing_type.display_name)
+                        tempMPESubtrackModel._subtracksOutputRoutingUpdater(forceUpdateChannels=True)
 
         self.item.add_playing_slot_index_listener(mpeMaster_playing_slot_index_changed)
         self.item.add_fired_slot_index_listener(mpeMaster_fired_slot_index_changed)
@@ -103,11 +112,12 @@ class MPEMasterTrackMix(object):
 
     def _get_mpe_controller_input_type_name(self):
         """ Used to fetch the input_type_name for the subtracks. Looks for available input_routing_type which starts
-        with the prefix defined in the conf.
+        with the prefixes defined in the conf.
         """
         for tempInputType in self.item.available_input_routing_types:
-            if tempInputType.display_name.startswith(conf.defaultMPEControllerNamePrefix):
-                return tempInputType.display_name
+            for tempPrefix in conf.defaultMPEControllerNamePrefix:
+                if tempInputType.display_name.startswith(tempPrefix):
+                    return tempInputType.display_name
 
         return "Computer Keyboard"
 
@@ -307,16 +317,12 @@ class MPESubTrackMix(object):
         self.item.add_input_routing_channel_listener(_input_routing_channel_changed_listener)
 
     def _add_updating_of_output_routing_channel(self):
-        def _mpeTrack_output_routing_type_listener():
-            if self.item.output_routing_type.display_name != self._MPEMasterTrackModel.item.name:
-
-
+        def _mpeTrack_output_routing_type_listener(self, forceUpdateChannels = False):
+            if self.item.output_routing_type.display_name != self._MPEMasterTrackModel.item.name or forceUpdateChannels:
                 def delayedCallbackForUpdatingMPESubtracksOutputRoutings(siblingSubtrackList):
-                    # log_message("Got siblinglist to update:")
-                    doUpdate = False;
-                    for tempSiblingMPESubtrack in siblingSubtrackList:
-                        # log_message("\n-",tempSiblingMPESubtrack._mpeChannelId)
+                    doUpdate = forceUpdateChannels;
 
+                    for tempSiblingMPESubtrack in siblingSubtrackList:
                         if tempSiblingMPESubtrack.item.output_routing_type.display_name != self._MPEMasterTrackModel.item.name:
                             tempSiblingMPESubtrack.set_output_routing_type_by_types_display_name(
                                 self._MPEMasterTrackModel.item.name)
@@ -332,27 +338,22 @@ class MPESubTrackMix(object):
                     return True
 
                 def delayedCallbackForUpdatingMPESubtracksOutputChannels(siblingSubtrackList):
-                    # log_message("Got siblinglist to update:")
                     for tempSiblingMPESubtrack in siblingSubtrackList:
                         _tempsorcTargetName = tempSiblingMPESubtrack._get_target_output_routing_channel_display_name()
-                        # log_message("Checking if need to update output_routing_type. Now:",
-                        #            tempSiblingMPESubtrack.item.output_routing_channel.display_name,
-                        #            "Should be:",_tempsorcTargetName)
                         if tempSiblingMPESubtrack.item.output_routing_channel.display_name != _tempsorcTargetName:
                             tempSiblingMPESubtrack.set_output_routing_channel_by_channel_display_name(
                                 _tempsorcTargetName)
                     return True
 
-                # log_message("Incorrect output_routing_type!")
                 tempSiblingTrackList = []
                 for tempSiblingMPESubtrackId, tempSiblingMPESubtrack in self._MPEMasterTrackModel._mpeSubtracks.iteritems():
                     tempSiblingTrackList.append(tempSiblingMPESubtrack)
 
-                # InstanceContainer.clientUpdateScheduler.delayClientUpdates(2)
                 InstanceContainer.add_delayed_callback("UpdateMPEMasters_"+self._MPEMasterTrackModel.s_name+"_SubtracksOutputRoutingTypes", delayedCallbackForUpdatingMPESubtracksOutputRoutings, (tempSiblingTrackList,), {},delayCycles=2)
 
+        setattr(self, '_subtracksOutputRoutingUpdater', types.MethodType(_mpeTrack_output_routing_type_listener, self))
 
-        self.item.add_output_routing_type_listener(_mpeTrack_output_routing_type_listener)
+        self.item.add_output_routing_type_listener(self._subtracksOutputRoutingUpdater)
 
 class MPEMasterClipMix(object):
     """ Mix-in class for a clip which is on the MPE Master track. Not yet utilized, but intended to enable simultaneous

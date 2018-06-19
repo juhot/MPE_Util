@@ -12,7 +12,7 @@ from ..UtilContainer import log_error
 
 itemTypeNamingInfos = ItemTypeNamingInfos._itemTypeNamingInfos
 utilizeGhostInputTrack = True
-defaultMPEControllerNamePrefix = "Seaboard"
+defaultMPEControllerNamePrefix = ["Seaboard"]
 defaultMpeChannelCount = 11
 
 _strToBoolDict = {
@@ -83,7 +83,7 @@ try:
                     utilizeGhostInputTrack = _parseBool(tempArgValue)
                     # log_message("Found utilizeGhostInputTrack from conf.txt, setting:", utilizeGhostInputTrack)
                 elif tempArgName == "defaultMPEControllerNamePrefix":
-                    tempArgValue = _parseStr(tempArgValue)
+                    tempArgValue = _parseStrList(tempArgValue)
                     if tempArgValue is not None:
                         defaultMPEControllerNamePrefix = tempArgValue
                         # log_message("Found defaultMPEControllerNamePrefix from conf.txt, setting:",
@@ -97,8 +97,7 @@ try:
                     tempPostfixList = _parseStrList(tempArgValue)
                     if tempPostfixList is not None:
                         # log_message("Found createMPEPostfixes from conf.txt, setting:", utilizeGhostInputTrack)
-                        itemTypeNamingInfos['Track.MidiTrack']['postfixesForFunctions']['create_mpe_input_tracks']\
-                            = tempPostfixList
+                        itemTypeNamingInfos['Track.MidiTrack']['postfixCallableFunctions']['create_mpe_input_tracks']['postfixes'] = tempPostfixList
 
 except IOError as e:
     pass

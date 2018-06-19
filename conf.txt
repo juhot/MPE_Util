@@ -4,14 +4,18 @@
 # The GhostInputTrack is a MIDI track with no input and no output, colored gray.
 utilizeGhostInputTrack: true
 
-# defaultMPEControllerNamePrefix: When creating a MPE Master track, its subtracks will receive their MIDI Input from MIDI
-# port which has a name which starts with this value. You may try e.g. "Seaboard" or "Linnstrument".
-defaultMPEControllerNamePrefix: "Seaboard"
+# defaultMPEControllerNamePrefix: When creating a MPE Master track, its subtracks will receive their MIDI Input from
+# MIDI port which has a name which starts with a value from this list. If multiple matching MIDI devices are available,
+# the one appearing earlier is chosen.
+# You may alter the list to suit your needs.
+defaultMPEControllerNamePrefix: "Seaboard", "Lightpad", "LinnStrument", "Soundplane"
 
 # defaultMpeChannelCount: defines how many MPE sub tracks will be created = how many channels are listened to.
 defaultMpeChannelCount: 16
 
 # createMPEPostfixes: a list of phrases which, when added to the end of track's name, activate the creation of MPE sub
 # tracks on the renamed track. Found postfix will be automatically removed. If loading a set with a track with its name
-# ending with a listed postfix, unexpected things may happen, so do not use phrases you normally use in track names!
+# ending with a listed postfix, unexpected things may happen, so do not use phrases you normally use in track names! The
+# case is ignored when looking for postfixes. You can specify the number of MPE-channels to create by adding a number
+# the postfix when renaming a track, E.G. Pads-creatempe8.
 createMPEPostfixes: "-createMPE", "-creatempe"
