@@ -60,7 +60,7 @@ message at the bottom of the screen saying "MPE Util loaded!".
 You may configure default values for your MPE-Controllers MIDI port names, the number of MIDI channels to use, and
 whether a GhostInputTrack will be created. The default settings may be changed by modifying file (instructions are in
 the file):
-MPE_Util/conf/config.txt
+MPE_Util/conf.txt
 
 You may alter the list of keyphrases which activate the creation of the MPE-midi tracks from the conf as well.
 Note: you will have to create a new or load an existing Live set for the changes to take effect!
